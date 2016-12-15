@@ -7,13 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		ED2DE24F1E0217AF005E906C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2DE24E1E0217AF005E906C /* AppDelegate.swift */; };
-		ED2DE2511E0217AF005E906C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2DE2501E0217AF005E906C /* ViewController.swift */; };
-		ED2DE2541E0217AF005E906C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ED2DE2521E0217AF005E906C /* Main.storyboard */; };
+		BE05A37266D7C41DBD9AB878 /* ARDMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05AE0DAAEC4436AABE33E9 /* ARDMainView.swift */; };
+		ED2DE24F1E0217AF005E906C /* ARDAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2DE24E1E0217AF005E906C /* ARDAppDelegate.swift */; };
+		ED2DE2511E0217AF005E906C /* ARDViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2DE2501E0217AF005E906C /* ARDViewController.swift */; };
 		ED2DE2561E0217AF005E906C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED2DE2551E0217AF005E906C /* Assets.xcassets */; };
 		ED2DE2591E0217AF005E906C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ED2DE2571E0217AF005E906C /* LaunchScreen.storyboard */; };
 		ED2DE2641E0217AF005E906C /* AppRTCSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2DE2631E0217AF005E906C /* AppRTCSwiftTests.swift */; };
 		ED2DE26F1E0217AF005E906C /* AppRTCSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2DE26E1E0217AF005E906C /* AppRTCSwiftUITests.swift */; };
+		ED2DE27E1E0217E3005E906C /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2DE27D1E0217E3005E906C /* WebRTC.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,10 +35,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BE05AE0DAAEC4436AABE33E9 /* ARDMainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARDMainView.swift; sourceTree = "<group>"; };
 		ED2DE24B1E0217AF005E906C /* AppRTCSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppRTCSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		ED2DE24E1E0217AF005E906C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		ED2DE2501E0217AF005E906C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		ED2DE2531E0217AF005E906C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		ED2DE24E1E0217AF005E906C /* ARDAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARDAppDelegate.swift; sourceTree = "<group>"; };
+		ED2DE2501E0217AF005E906C /* ARDViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARDViewController.swift; sourceTree = "<group>"; };
 		ED2DE2551E0217AF005E906C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ED2DE2581E0217AF005E906C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED2DE25A1E0217AF005E906C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -47,6 +48,7 @@
 		ED2DE26A1E0217AF005E906C /* AppRTCSwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppRTCSwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED2DE26E1E0217AF005E906C /* AppRTCSwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRTCSwiftUITests.swift; sourceTree = "<group>"; };
 		ED2DE2701E0217AF005E906C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ED2DE27D1E0217E3005E906C /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WebRTC.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED2DE27E1E0217E3005E906C /* WebRTC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,9 +77,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BE05A3B200B0338A5AF40F46 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				BE05AE0DAAEC4436AABE33E9 /* ARDMainView.swift */,
+			);
+			path = ui;
+			sourceTree = "<group>";
+		};
 		ED2DE2421E0217AF005E906C = {
 			isa = PBXGroup;
 			children = (
+				ED2DE27C1E0217D0005E906C /* Frameworks */,
 				ED2DE24D1E0217AF005E906C /* AppRTCSwift */,
 				ED2DE2621E0217AF005E906C /* AppRTCSwiftTests */,
 				ED2DE26D1E0217AF005E906C /* AppRTCSwiftUITests */,
@@ -97,12 +109,12 @@
 		ED2DE24D1E0217AF005E906C /* AppRTCSwift */ = {
 			isa = PBXGroup;
 			children = (
-				ED2DE24E1E0217AF005E906C /* AppDelegate.swift */,
-				ED2DE2501E0217AF005E906C /* ViewController.swift */,
-				ED2DE2521E0217AF005E906C /* Main.storyboard */,
+				ED2DE24E1E0217AF005E906C /* ARDAppDelegate.swift */,
+				ED2DE2501E0217AF005E906C /* ARDViewController.swift */,
 				ED2DE2551E0217AF005E906C /* Assets.xcassets */,
 				ED2DE2571E0217AF005E906C /* LaunchScreen.storyboard */,
 				ED2DE25A1E0217AF005E906C /* Info.plist */,
+				BE05A3B200B0338A5AF40F46 /* ui */,
 			);
 			path = AppRTCSwift;
 			sourceTree = "<group>";
@@ -123,6 +135,14 @@
 				ED2DE2701E0217AF005E906C /* Info.plist */,
 			);
 			path = AppRTCSwiftUITests;
+			sourceTree = "<group>";
+		};
+		ED2DE27C1E0217D0005E906C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				ED2DE27D1E0217E3005E906C /* WebRTC.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -237,7 +257,6 @@
 			files = (
 				ED2DE2591E0217AF005E906C /* LaunchScreen.storyboard in Resources */,
 				ED2DE2561E0217AF005E906C /* Assets.xcassets in Resources */,
-				ED2DE2541E0217AF005E906C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,8 +281,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ED2DE2511E0217AF005E906C /* ViewController.swift in Sources */,
-				ED2DE24F1E0217AF005E906C /* AppDelegate.swift in Sources */,
+				ED2DE2511E0217AF005E906C /* ARDViewController.swift in Sources */,
+				ED2DE24F1E0217AF005E906C /* ARDAppDelegate.swift in Sources */,
+				BE05A37266D7C41DBD9AB878 /* ARDMainView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,14 +319,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		ED2DE2521E0217AF005E906C /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				ED2DE2531E0217AF005E906C /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		ED2DE2571E0217AF005E906C /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -416,6 +428,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 6URP555BR7;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = AppRTCSwift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.onebigfunction.AppRTCSwift;
@@ -429,6 +445,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 6URP555BR7;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = AppRTCSwift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.onebigfunction.AppRTCSwift;
