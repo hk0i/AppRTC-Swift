@@ -10,6 +10,9 @@ let kRoomTextFieldHeight: CGFloat = 40.0
 let kRoomTextFieldMargin: CGFloat = 8.0
 let kCallControlMargin: CGFloat = 8.0
 
+//TODO: rename all private variables to use _ prefix to match original code
+// a little better.
+
 private class ARDRoomTextField: UIView {
 
   private var roomTextView: UITextField?
@@ -302,7 +305,7 @@ class ARDMainView: UIView {
 
   func onStartCall(sender: AnyObject) {
     var room = self.roomTextField!.roomText
-    if room.characters.count == 0 && self.loopbackSwitch!.isOn {
+    if room.isEmpty && self.loopbackSwitch!.isOn {
       room = NSUUID.init().uuidString
     }
 
