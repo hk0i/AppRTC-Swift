@@ -15,9 +15,9 @@ let barButtonImageString = "ic_settings_black_24dp.png"
 
 class ARDMainViewController: UIViewController {
 
-  internal var _mainView: ARDMainView?
-  internal var _audioPlayer: AVAudioPlayer?
-  internal var _useManualAudio: Bool?
+  fileprivate var _mainView: ARDMainView?
+  fileprivate var _audioPlayer: AVAudioPlayer?
+  fileprivate var _useManualAudio: Bool?
 
   override func loadView() {
     self.title = "Swift AppRTC Mobile"
@@ -56,7 +56,7 @@ class ARDMainViewController: UIViewController {
 
   // MARK: Private
 
-  func showSettings(sender AnyObject) {
+  func showSettings(sender: AnyObject) {
     let settingsController = ARDSettingsViewController(style: .plain,
         mediaConstraintsModel: ARDMediaConstraintsModel())
     let navigationController = UINavigationController(rootViewController:
