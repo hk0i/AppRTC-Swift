@@ -22,7 +22,7 @@ let videoResolutionsStaticValues = [
  * Also translates current user defined media constraint into RTCMediaConstraints
  * dictionary.
  */
-class ARDMediaConstraintModel {
+class ARDMediaConstraintsModel {
 
   private lazy var _settingsStore = ARDMediaConstraintsSettingsStore()
 
