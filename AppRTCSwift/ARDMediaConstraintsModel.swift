@@ -17,7 +17,7 @@ let videoResolutionsStaticValues = [
  *
  * Currently used for streaming media constraints only.
  * In future audio media constraints support can be added as well.
- * Offers list of avaliable video resolutions that can construct streaming media constraint.
+ * Offers list of available video resolutions that can construct streaming media constraint.
  * Exposes methods for reading and storing media constraints from persistent store.
  * Also translates current user defined media constraint into RTCMediaConstraints
  * dictionary.
@@ -44,12 +44,13 @@ class ARDMediaConstraintsModel {
    */
   func currentVideoResolutionConstraintFromStore() -> String {
     var constraint = self._settingsStore.videoResolutionConstraintsSetting()
-    if constraint.isEmpty {
-      constraint = self.defaultVideoResolutionConstraintsSetting(constraint)
-      self._settingsStore.setVideoResolutionConstraintsSetting(constraint)
+    if (constraint ?? "").isEmpty {
+      //if constraint is nil or empty
+      constraint = self.defaultVideoResolutionMediaConstraint
+      self._settingsStore.setVideoResolutionConstraintsSetting(constraint!)
     }
 
-    return constraint;
+    return constraint!;
   }
 
   /**

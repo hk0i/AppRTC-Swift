@@ -160,14 +160,14 @@ extension ARDMainViewController : ARDMainViewDelegate {
       //    let session = RTCAudioSession.sharedInstance
       //    session.useManualAudio = useManualAudio
       //    session.isAudioEnabled = false
-      
-      let videoCallViewController: UIViewController = ARDVideoCallViewController(room:
-        trimmedRoom,
-                                                                                 isLoopback: isLoopback,
-                                                                                 isAudioOnly: isAudioOnly,
-                                                                                 shouldMakeAecDump: shouldMakeAecDump,
-                                                                                 shouldUseLevelControl: shouldUseLevelControl,
-                                                                                 delegate: self)
+
+      let videoCallViewController: UIViewController = ARDVideoCallViewController(
+          room: trimmedRoom,
+          isLoopback: isLoopback,
+          isAudioOnly: isAudioOnly,
+          shouldMakeAecDump: shouldMakeAecDump,
+          shouldUseLevelControl: shouldUseLevelControl,
+          delegate: self)
       
       videoCallViewController.modalTransitionStyle = .crossDissolve
       self.present(videoCallViewController, animated: true)
