@@ -16,9 +16,9 @@ class ARDVideoCallViewController: UIViewController {
 
   var delegate: ARDVideoCallViewControllerDelegate?
 
-  private var _localVideoTrack: RTCVideoTrack?
+  fileprivate var _localVideoTrack: RTCVideoTrack?
   private var _remoteVideoTrack: RTCVideoTrack?
-  private var _videoCallView: ARDVideoCallView?
+  fileprivate var _videoCallView: ARDVideoCallView?
   fileprivate var _portOverride: AVAudioSessionPortOverride?
 
   private var _client = ARDAppClient?
@@ -47,8 +47,8 @@ class ARDVideoCallViewController: UIViewController {
 
   override func loadView() {
     self._videoCallView = ARDVideoCallView(frame: CGRect.zero)
-    self._videoCallView.delegate = self
-    self._videoCallView.statusLabel.text
+    self._videoCallView!.delegate = self
+    self._videoCallView!.statusLabel.text
         = self.statusText(forState: RTCIceConnectionState.new)
     self.view = self._videoCallView
   }
@@ -72,7 +72,7 @@ class ARDVideoCallViewController: UIViewController {
       source = localSource
     }
 
-    self._videoCallView.localVideoView.captureSession = source.captureSession
+    self._videoCallView!.localVideoView.captureSession = source.captureSession
   }
 
   func setRemoteVideoTrack(_ remoteVideoTrack: RTCVideoTrack) {
@@ -80,22 +80,22 @@ class ARDVideoCallViewController: UIViewController {
       return
     }
 
-    self._remoteVideoTrack.remove(_videoCallView.remoteVidoeView)
+    self._remoteVideoTrack!.remove(_videoCallView!.remoteVidoeView)
     self._remoteVideoTrack = nil
-    self._videoCallView.remoteVideoView.render(frame: nil)
+    self._videoCallView!.remoteVideoView.render(frame: nil)
     self._remoteVideoTrack = remoteVideoTrack
-    self._remoteVideoTrack.add(_videoCallView.remoteVideoView)
+    self._remoteVideoTrack!.add(_videoCallView!.remoteVideoView)
   }
 
   func hangUp() {
     self._remoteVideoTrack = nil
     self._localVideoTrack = nil
     self._client.disconnect()
-    self.delegate.viewControllerDidFinish(viewController: self)
+    self.delegate!.viewControllerDidFinish(viewController: self)
   }
 
   func switchCamera() {
-    var source = self._localVideoTrack.source
+    let source = self._localVideoTrack?.source
     if let avSource = source as? RTCAVFoundationVideoSource {
       avSource.useBackCamera = !avSource.useBackCamera
     }
@@ -113,7 +113,7 @@ class ARDVideoCallViewController: UIViewController {
   }
 
   func showAlert(withMessage message: String) {
-    let alertView = UIAlertView(title: nil, message: message,
+    let alertView = UIAlertView(title: "", message: message,
         delegate: nil, cancelButtonTitle: "OK", otherButtonTitles: nil)
 
     alertView.show()
@@ -149,7 +149,7 @@ extension ARDVideoCallViewController: ARDAppClientDelegate {
 
   func appClient(_ client: ARDClient,
                  didGetStats stats: [Any]) {
-    self._videoCallView.statsView.stats = stats
+    self._videoCallView!.statsView.stats = stats
   }
 
   func appClient(_ client: ARDClient,
@@ -197,6 +197,6 @@ extension ARDVideoCallViewController: ARDVideoCallViewDelegate {
 
   func videoCallViewDidEnableStats(_ view: ARDVideoCallView) {
     self._client.shouldGetStats = true
-    self._videoCallView.statsView.hidden = false
+    self._videoCallView!.statsView.hidden = false
   }
 }
