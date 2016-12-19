@@ -48,7 +48,7 @@ class ARDVideoCallViewController: UIViewController {
   override func loadView() {
     self._videoCallView = ARDVideoCallView(frame: CGRect.zero)
     self._videoCallView!.delegate = self
-    self._videoCallView!.statusLabel.text
+    self._videoCallView!.statusLabel!.text
         = self.statusText(forState: RTCIceConnectionState.new)
     self.view = self._videoCallView
   }
@@ -57,7 +57,7 @@ class ARDVideoCallViewController: UIViewController {
     assertionFailure("Storyboard not supported")
   }
 
-  // MARK: private
+  // MARK: - Private
 
   func setLocalVideoTrack(_ localVideoTrack: RTCVideoTrack) {
     if self._localVideoTrack == localVideoTrack {
@@ -72,7 +72,7 @@ class ARDVideoCallViewController: UIViewController {
       source = localSource
     }
 
-    self._videoCallView!.localVideoView.captureSession = source.captureSession
+    self._videoCallView!.localVideoView!.captureSession = source!.captureSession
   }
 
   func setRemoteVideoTrack(_ remoteVideoTrack: RTCVideoTrack) {
@@ -80,11 +80,11 @@ class ARDVideoCallViewController: UIViewController {
       return
     }
 
-    self._remoteVideoTrack!.remove(_videoCallView!.remoteVidoeView)
+    self._remoteVideoTrack!.remove(_videoCallView!.remoteVideoView!)
     self._remoteVideoTrack = nil
-    self._videoCallView!.remoteVideoView.render(frame: nil)
+    self._videoCallView!.remoteVideoView!.renderFrame(nil)
     self._remoteVideoTrack = remoteVideoTrack
-    self._remoteVideoTrack!.add(_videoCallView!.remoteVideoView)
+    self._remoteVideoTrack!.add(_videoCallView!.remoteVideoView!)
   }
 
   func hangUp() {
@@ -113,15 +113,15 @@ class ARDVideoCallViewController: UIViewController {
   }
 
   func showAlert(withMessage message: String) {
-    let alertView = UIAlertView(title: "", message: message,
-        delegate: nil, cancelButtonTitle: "OK", otherButtonTitles: nil)
+    let alertView = UIAlertView(title: nil, message: message,
+                                delegate: nil, cancelButtonTitle: "OK")
 
     alertView.show()
   }
 
 }
 
-// MARK: ARDAppClientDelegate
+// MARK: - ARDAppClientDelegate
 
 extension ARDVideoCallViewController: ARDAppClientDelegate {
   func appClient(_ client: ARDAppClient,
@@ -149,7 +149,7 @@ extension ARDVideoCallViewController: ARDAppClientDelegate {
 
   func appClient(_ client: ARDClient,
                  didGetStats stats: [Any]) {
-    self._videoCallView!.statsView.stats = stats
+    self._videoCallView!.statsView!.stats = stats
   }
 
   func appClient(_ client: ARDClient,
@@ -160,26 +160,26 @@ extension ARDVideoCallViewController: ARDAppClientDelegate {
   }
 }
 
-// MARK: ARDVideoCallViewDelegate
+// MARK: - ARDVideoCallViewDelegate
 
 extension ARDVideoCallViewController: ARDVideoCallViewDelegate {
-  func videoCallViewDidHangUp(view: ARDVideoCallView) {
+  func videoCallViewDidHangUp(_ view: ARDVideoCallView) {
     self.switchCamera()
   }
 
-  func videoCallViewDidSwitchCamera(view: ARDVideoCallView) {
+  func videoCallViewDidSwitchCamera(_ view: ARDVideoCallView) {
     self.switchCamera()
   }
 
-  func videoCallViewDidChangeRoute(view: ARDVideoCallView) {
+  func videoCallViewDidChangeRoute(_ view: ARDVideoCallView) {
+    print("WARNING: Removed audio session code for didChangeRoute")
+
+    /*
     var override = AVAudioSessionPortOverride.none
     if self._portOverride == .none {
       override = .speaker
     }
-
-    print("WARNING: Removed audio session code for didChangeRoute")
-
-    /*
+    
     RTCDispatcher.dispatchAsync(on: .typeAudioSession) {
     var session = RTCAudioSession.sharedInstance()
     session.lockForConfiguration()
@@ -197,6 +197,6 @@ extension ARDVideoCallViewController: ARDVideoCallViewDelegate {
 
   func videoCallViewDidEnableStats(_ view: ARDVideoCallView) {
     self._client.shouldGetStats = true
-    self._videoCallView!.statsView.hidden = false
+    self._videoCallView!.statsView!.isHidden = false
   }
 }
