@@ -17,11 +17,11 @@ class ARDVideoCallViewController: UIViewController {
   var delegate: ARDVideoCallViewControllerDelegate?
 
   fileprivate var _localVideoTrack: RTCVideoTrack?
-  private var _remoteVideoTrack: RTCVideoTrack?
+  fileprivate var _remoteVideoTrack: RTCVideoTrack?
   fileprivate var _videoCallView: ARDVideoCallView?
   fileprivate var _portOverride: AVAudioSessionPortOverride?
 
-  private var _client = ARDAppClient?
+  fileprivate var _client: ARDAppClient?
 
   init(room: String,
        isLoopback: Bool,
@@ -32,12 +32,12 @@ class ARDVideoCallViewController: UIViewController {
 
     self.delegate = delegate
     self._client = ARDAppClient(delegate: self)
-    var mediaConstraintsModel = ARDMediaConstraintsModel()
-    var cameraConstraints = RTCMediaConstraints(mandatoryConstraints: nil,
+    let mediaConstraintsModel = ARDMediaConstraintsModel()
+    let cameraConstraints = RTCMediaConstraints(mandatoryConstraints: nil,
         optionalConstraints: mediaConstraintsModel
             .currentMediaConstraintFromStoreAsRTCDictionary())
-    self._client.setCameraConstraints(cameraConstraints)
-    self._client.connectToRoom(withId: room,
+    self._client?.cameraConstraints = cameraConstraints
+    self._client?.connectToRoom(roomId: room,
         isLoopback: isLoopback,
         isAudioOnly: isAudioOnly,
         shouldMakeAecDump: shouldMakeAecDump,
@@ -90,7 +90,7 @@ class ARDVideoCallViewController: UIViewController {
   func hangUp() {
     self._remoteVideoTrack = nil
     self._localVideoTrack = nil
-    self._client.disconnect()
+    self._client?.disconnect()
     self.delegate!.viewControllerDidFinish(viewController: self)
   }
 
@@ -124,6 +124,17 @@ class ARDVideoCallViewController: UIViewController {
 // MARK: - ARDAppClientDelegate
 
 extension ARDVideoCallViewController: ARDAppClientDelegate {
+  internal func appClient(_ client: ARDAppClient,
+                          didChangeConnectionState state: RTCIceConnectionState) {
+//    RTCLogEx(.info, String(format: "ICE state changed: %d", Int(state)))
+    DispatchQueue.main.async { [weak self] in
+      if let strongSelf = self {
+        strongSelf._videoCallView?.statusLabel?.text
+          = strongSelf.statusText(forState: state)
+      }
+    }
+  }
+
   func appClient(_ client: ARDAppClient,
                  didChangeState state: ARDAppClientState) {
     switch (state) {
@@ -142,17 +153,23 @@ extension ARDVideoCallViewController: ARDAppClientDelegate {
     }
   }
 
-  func appClient(_ client: ARDClient,
+  func appClient(_ client: ARDAppClient,
                  didReceiveLocalVideoTrack localVideoTrack: RTCVideoTrack) {
     self._localVideoTrack = localVideoTrack
   }
-
-  func appClient(_ client: ARDClient,
-                 didGetStats stats: [Any]) {
-    self._videoCallView!.statsView!.stats = stats
+  
+  func appClient(_ client: ARDAppClient,
+                 didReceiveRemoteVideoTrack remoteVideoTrack: RTCVideoTrack) {
+    self._remoteVideoTrack = remoteVideoTrack
+    self._videoCallView?.statusLabel?.isHidden = true
   }
 
-  func appClient(_ client: ARDClient,
+  func appClient(_ client: ARDAppClient,
+                 didGetStats stats: [RTCLegacyStatsReport]) {
+    self._videoCallView?.statsView?.stats = stats
+  }
+
+  func appClient(_ client: ARDAppClient,
                  didError error: Error) {
     let message = error.localizedDescription
     self.showAlert(withMessage: message)
@@ -196,7 +213,7 @@ extension ARDVideoCallViewController: ARDVideoCallViewDelegate {
   }
 
   func videoCallViewDidEnableStats(_ view: ARDVideoCallView) {
-    self._client.shouldGetStats = true
-    self._videoCallView!.statsView!.isHidden = false
+    self._client?.shouldGetStats = true
+    self._videoCallView?.statsView?.isHidden = false
   }
 }
