@@ -208,7 +208,7 @@ class ARDAppClient: NSObject {
         self._statsTimer = ARDTimerProxy(interval: 1, repeats: true) {          [weak self] in
 
           if let strongSelf = self {
-            strongSelf.peerConnection?.stats(for: nil, statsOutputLevel: .debug)
+            strongSelf._peerConnection?.stats(for: nil, statsOutputLevel: .debug)
             { (stats: [RTCLegacyStatsReport]) in
               DispatchQueue.main.async {
                 strongSelf.delegate?.appClient(strongSelf, didGetStats: stats)
@@ -293,25 +293,26 @@ class ARDAppClient: NSObject {
     }
 
     // join room on server
-    self.roomServerClient?.joinRoom(id: roomId) {
+    self.roomServerClient?.joinRoom(roomId: roomId, isLoopback: isLoopback) {
         [weak self]
         (response: ARDJoinResponse, error: Error?) in
 
-      let strongSelf = self
+      guard let strongSelf = self else { return }
+
       if let err = error {
-        strongSelf.delegate.appClient(strongSelf, didError: err)
+        strongSelf.delegate?.appClient(strongSelf, didError: err)
         return
       }
 
       let selfType = type(of: strongSelf)
-      if let joinError = selfType.errorForJoin(resultType: response.result) {
-        RTCLogEx(String(format: "Failed to join room: %@", roomId))
+      if let joinError = selfType.error(forMessageResultType: response.result) {
+        RTCLogEx(.error, "Failed to join room: \(roomId)")
         strongSelf.disconnect()
         strongSelf.delegate.appClient(strongSelf, didError: joinError)
         return
       }
 
-      RTCLogEx(.info, String(format: "Joined room: %@", roomId))
+      RTCLogEx(.info, "Joined room: \(roomId)")
       strongSelf.roomId = response.roomId
       strongSelf.clientId = response.clientId
       strongSelf.isInitiator = response.isInitiator
@@ -352,7 +353,7 @@ class ARDAppClient: NSObject {
       if channel.state == .registered {
         // tell the other client we're hanging up
         let byeMessage = ARDByeMessage()
-        channel.send(message: byeMessage)
+        channel.sendMessage(byeMessage)
       }
 
       // disconnect from collider
@@ -468,12 +469,13 @@ class ARDAppClient: NSObject {
     if self.isInitiator {
       // send offer
       self._peerConnection?.offer(for: self.defaultOfferConstraints) {
-          [weak self] description, error in
-        if let strongSelf = self {
-          //todo: figure out why this cannot find the RTCSessionDescriptionDelegate
-          //      this may be a quirk of the method name and property name clashing.
-          strongSelf.peerConnection(self._peerConnection,
-              didCreateSessionDescription: description, error: error)
+          [weak self] sessionDescription, error in
+        if let strongSelf = self,
+            let connection = strongSelf._peerConnection,
+            let description = sessionDescription {
+
+          strongSelf.peerConnection(connection,
+              didCreate: description, error: error)
         }
       }
     }
@@ -532,14 +534,15 @@ class ARDAppClient: NSObject {
       case .offer: fallthrough
       case .answer:
         if let sdpMessage = message as? ARDSessionDescriptionMessage {
-          let description = sdpMessage.description
-          let sdpPreferringH264 = ARDSDPUtils.descriptionFor(
-              description: description, preferredVideoCodec: "H264")
+          let description = sdpMessage.sessionDescription
+          let sdpPreferringH264 = ARDSDPUtils.makeDescriptionFor(
+              description: description, preferringVideoCodec: "H264")
 
           self._peerConnection?.setRemoteDescription(sdpPreferringH264) {
               [weak self] error in
-            if let strongSelf = self {
-              strongSelf.peerConnection(strongSelf.peerConnection,
+            if let strongSelf = self,
+                let peerConnection = strongSelf._peerConnection {
+              strongSelf.peerConnection(peerConnection,
                   didSetSessionDescriptionWithError: error)
             }
           }
@@ -637,7 +640,7 @@ class ARDAppClient: NSObject {
 #if !((arch(i386) || arch(x86_64)) && os(iOS))
     if (!self.isAudioOnly) {
       let cameraConstraints = self.cameraConstraints
-      let source = self.factory.avFoundationVideoSource(with: cameraConstraints)
+      let source = self.factory?.avFoundationVideoSource(with: cameraConstraints)
       let localVideoTrack = self.factory.videoTrack(with: source,
           trackId: kVideoTrackId)
     }
@@ -665,9 +668,9 @@ class ARDAppClient: NSObject {
       }
     }
 
-    self.channel?.register(roomId: self.roomId, clientId: self.clientId)
+    self.channel?.registerForRoom(withId: self.roomId, clientId: self.clientId)
     if self.isLoopback {
-      self.loopbackChannel?.register(roomId: self.roomId,
+      self.loopbackChannel?.registerForRoom(withId: self.roomId,
           clientId: self.clientId)
     }
   } // registerWithColliderIfReady()
@@ -675,9 +678,7 @@ class ARDAppClient: NSObject {
   // MARK - Defaults
 
   func defaultMediaAudioConstraints() -> RTCMediaConstraints {
-    let valueLevelControl = self.shouldUseLevelControl
-        ? kRTCMediaConstraintsValueTrue
-        : kRTCMediaConstraintsValueFalse
+    let valueLevelControl = self.shouldUseLevelControl ? kRTCMediaConstraintsValueTrue : kRTCMediaConstraintsValueFalse
 
     let mandatoryConstraints = [
         kRTCMediaConstraintsLevelControl: valueLevelControl
@@ -693,11 +694,11 @@ class ARDAppClient: NSObject {
 
   // MARK - Errors
 
-  private static func error(messageResultType resultType: ARDJoinResultType) {
+  private static func error(forMessageResultType resultType: ARDJoinResultType) -> NSError? {
     var error: NSError?
     switch resultType {
 
-      case unknown:
+      case .unknown:
         error = NSError(domain: ARDAppClient.kErrorDomain,
             code: kClientError.unknown.rawValue,
             userInfo: [
@@ -827,9 +828,15 @@ extension ARDAppClient: RTCPeerConnectionDelegate {
   }
 } // RTCPeerConnectionDelegate
 
-// MARK: -
+// MARK: - RTCSessionDescriptionDelegate
+// Callbacks for this delegate occur on non-main thread and need to be dispatched
+// back to the main queue as needed.
 
-extension ARDAppClient: RTCSessionDescriptionDelegate {
+// NOTE: the RTCSessionDescriptionDelegate seems to have disappeared (?) so
+// I've implemented these functions anyway, even though there's no actual protocol
+// associated with it (that I can find)
+
+extension ARDAppClient {
   func peerConnection(_ peerConnection: RTCPeerConnection,
                       didCreate sessionDescription: RTCSessionDescription,
                       error: Error?) {
@@ -851,8 +858,9 @@ extension ARDAppClient: RTCSessionDescriptionDelegate {
       } // if there was an error
 
       // prefer H264 if available
-      let sdpPreferringH264 = ARDSDPUtils.description(sessionDescription,
-          preferredVideoCodec: "H264")
+      let sdpPreferringH264 = ARDSDPUtils.makeDescriptionFor(
+          description: sessionDescription,
+          preferringVideoCodec: "H264")
       self._peerConnection.setLocalDescription(sdpPreferringH264) {
         [weak self] in
 

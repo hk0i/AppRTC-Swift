@@ -17,12 +17,16 @@ enum ARDSignalingMessageType {
 class ARDSignalingMessage: NSObject {
   let type: ARDSignalingMessageType
 
-  static func messageFrom(jsonString: String) {
+  init(type: ARDSignalingMessageType) {
+    self.type = type
+  }
+
+  static func messageFromJsonString(_ jsonString: String) {
 
   }
 
-  func jsonData() -> NSData {
-
+  func jsonData() -> NSData? {
+    return nil
   }
 }
 

@@ -12,6 +12,7 @@
 		BE05A37266D7C41DBD9AB878 /* ARDMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05AE0DAAEC4436AABE33E9 /* ARDMainView.swift */; };
 		BE05A4E872EEA762DA9585E1 /* ARDMediaConstraintsSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05A75C55F295F2BF3FD9F9 /* ARDMediaConstraintsSettingsStore.swift */; };
 		BE05A63ABA043373B25816C7 /* ARDTurnClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05A4AEBB55056F744180AE /* ARDTurnClient.swift */; };
+		BE05A6A7BD4C3E883579EF85 /* ARDJoinResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05AF88BEBE471776498913 /* ARDJoinResponse.swift */; };
 		BE05A86C04B6253A6F61F6D6 /* ARDSignalingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05AE25CF7C4973829F721A /* ARDSignalingMessage.swift */; };
 		BE05A8CF35CA984D2AB9A389 /* ARDStatsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05A03665369C4BA4FF7543 /* ARDStatsBuilder.swift */; };
 		BE05A90343C3F62CA539E92F /* ARDMediaConstraintsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05A925C6E0AE36FF2838A5 /* ARDMediaConstraintsModel.swift */; };
@@ -19,6 +20,7 @@
 		BE05AA4301CB626BEA93D389 /* ARDAppClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05AAC247D1905BC1456749 /* ARDAppClient.swift */; };
 		BE05AB8D28372908D892B1C5 /* ARDSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05AC5CD26D211296FB79D1 /* ARDSettingsViewController.swift */; };
 		BE05AC3B7C3F04E998B5D5BB /* ARDRoomServerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05ABC0C9AC38A07C197262 /* ARDRoomServerClient.swift */; };
+		BE05AEC1AE92FD7451BCBB97 /* ARDSDPUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05ABA53D58FA592A699ACC /* ARDSDPUtils.swift */; };
 		BE05AF146AA4DFA34FDCE83D /* ARDVideoCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05AAF0194704990C97301B /* ARDVideoCallViewController.swift */; };
 		ED2DE24F1E0217AF005E906C /* ARDAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2DE24E1E0217AF005E906C /* ARDAppDelegate.swift */; };
 		ED2DE2511E0217AF005E906C /* ARDViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2DE2501E0217AF005E906C /* ARDViewController.swift */; };
@@ -55,11 +57,13 @@
 		BE05A925C6E0AE36FF2838A5 /* ARDMediaConstraintsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARDMediaConstraintsModel.swift; sourceTree = "<group>"; };
 		BE05AAC247D1905BC1456749 /* ARDAppClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARDAppClient.swift; sourceTree = "<group>"; };
 		BE05AAF0194704990C97301B /* ARDVideoCallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARDVideoCallViewController.swift; sourceTree = "<group>"; };
+		BE05ABA53D58FA592A699ACC /* ARDSDPUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARDSDPUtils.swift; sourceTree = "<group>"; };
 		BE05ABC0C9AC38A07C197262 /* ARDRoomServerClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARDRoomServerClient.swift; sourceTree = "<group>"; };
 		BE05AC5CD26D211296FB79D1 /* ARDSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARDSettingsViewController.swift; sourceTree = "<group>"; };
 		BE05AE0DAAEC4436AABE33E9 /* ARDMainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARDMainView.swift; sourceTree = "<group>"; };
 		BE05AE25CF7C4973829F721A /* ARDSignalingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARDSignalingMessage.swift; sourceTree = "<group>"; };
 		BE05AEFF5F50F5035F189F2B /* ARDStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARDStatsView.swift; sourceTree = "<group>"; };
+		BE05AF88BEBE471776498913 /* ARDJoinResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARDJoinResponse.swift; sourceTree = "<group>"; };
 		ED2DE24B1E0217AF005E906C /* AppRTCSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppRTCSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED2DE24E1E0217AF005E906C /* ARDAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARDAppDelegate.swift; sourceTree = "<group>"; };
 		ED2DE2501E0217AF005E906C /* ARDViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARDViewController.swift; sourceTree = "<group>"; };
@@ -128,6 +132,7 @@
 				ED2DE2621E0217AF005E906C /* AppRTCSwiftTests */,
 				ED2DE26D1E0217AF005E906C /* AppRTCSwiftUITests */,
 				ED2DE24C1E0217AF005E906C /* Products */,
+				BE05AF88BEBE471776498913 /* ARDJoinResponse.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -159,6 +164,7 @@
 				BE05A03665369C4BA4FF7543 /* ARDStatsBuilder.swift */,
 				BE05ABC0C9AC38A07C197262 /* ARDRoomServerClient.swift */,
 				BE05A4AEBB55056F744180AE /* ARDTurnClient.swift */,
+				BE05ABA53D58FA592A699ACC /* ARDSDPUtils.swift */,
 			);
 			path = AppRTCSwift;
 			sourceTree = "<group>";
@@ -340,6 +346,8 @@
 				BE05A8CF35CA984D2AB9A389 /* ARDStatsBuilder.swift in Sources */,
 				BE05AC3B7C3F04E998B5D5BB /* ARDRoomServerClient.swift in Sources */,
 				BE05A63ABA043373B25816C7 /* ARDTurnClient.swift in Sources */,
+				BE05A6A7BD4C3E883579EF85 /* ARDJoinResponse.swift in Sources */,
+				BE05AEC1AE92FD7451BCBB97 /* ARDSDPUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
