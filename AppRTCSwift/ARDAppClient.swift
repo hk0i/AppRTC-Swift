@@ -308,7 +308,7 @@ class ARDAppClient: NSObject {
       if let joinError = selfType.error(forMessageResultType: response.result) {
         RTCLogEx(.error, "Failed to join room: \(roomId)")
         strongSelf.disconnect()
-        strongSelf.delegate.appClient(strongSelf, didError: joinError)
+        strongSelf.delegate?.appClient(strongSelf, didError: joinError)
         return
       }
 
@@ -317,7 +317,7 @@ class ARDAppClient: NSObject {
       strongSelf.clientId = response.clientId
       strongSelf.isInitiator = response.isInitiator
 
-      for var message in response.messages {
+      for message in response.messages {
         if message.type == .offer || message.type == .answer {
           strongSelf.hasReceivedSdp = true
           strongSelf.messageQueue.insert(message, at: 0)
@@ -842,7 +842,7 @@ extension ARDAppClient {
                       error: Error?) {
     DispatchQueue.main.async {
       if let err = error {
-        RTCLogEx(.error, "Failed to create session description. Error: \(error)")
+        RTCLogEx(.error, "Failed to create session description. Error: \(err)")
         self.disconnect()
 
         let userInfo = [
@@ -861,12 +861,13 @@ extension ARDAppClient {
       let sdpPreferringH264 = ARDSDPUtils.makeDescriptionFor(
           description: sessionDescription,
           preferringVideoCodec: "H264")
-      self._peerConnection.setLocalDescription(sdpPreferringH264) {
-        [weak self] in
+      self._peerConnection?.setLocalDescription(sdpPreferringH264) {
+          [weak self] error in
 
-        let strongSelf = self
-        strongSelf.peerConnection(strongSelf,
-            didSetSessionDescriptionWithError: error)
+        if let strongSelf = self, let peerConnection = strongSelf._peerConnection {
+          strongSelf.peerConnection(peerConnection,
+              didSetSessionDescriptionWithError: error)
+        }
       }
 
       let message = ARDSessionDescriptionMessage(description: sdpPreferringH264)
